@@ -29,6 +29,11 @@ public class ClientController {
         return clientService.getClientById(id);
     }
 
+    @GetMapping("/rfid/{rfid}")
+    public Client getClientByRFID(@PathVariable String rfid) {
+        return clientService.getClientByRFID(rfid);
+    }
+
     @PutMapping("/{id}")
     public Client updateClient(@PathVariable Long id, @RequestBody Client clientDetails) {
         return clientService.updateClient(id, clientDetails);
@@ -44,3 +49,5 @@ public class ClientController {
         clientService.deleteClient(id);
     }
 }
+
+
