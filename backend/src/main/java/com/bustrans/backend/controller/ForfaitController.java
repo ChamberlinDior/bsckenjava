@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -84,22 +85,21 @@ public class ForfaitController {
         clientService.saveClient(client);
     }
 
-    // New endpoint to fetch active forfaits by RFID
-    @GetMapping("/active/{rfid}")
-    public ResponseEntity<List<Forfait>> getActiveForfaitsByClientRFID(@PathVariable String rfid) {
+    // Nouvelle méthode pour récupérer le statut du forfait via le RFID
+    @GetMapping("/status/{rfid}")
+    public ResponseEntity<String> getForfaitStatusByRFID(@PathVariable String rfid) {
         Client client = clientService.getClientByRFID(rfid);
         if (client == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build(); // Si le client n'existe pas, retourne 404
         }
 
-        List<Forfait> activeForfaits = forfaitService.getAllForfaits().stream()
-                .filter(f -> f.getClient().equals(client) && f.getDateExpiration().after(new Date()))
-                .collect(Collectors.toList());
-
-        if (activeForfaits.isEmpty()) {
-            return ResponseEntity.noContent().build();
+        // Vérifie si le client a un forfait actif
+        Date expirationDate = client.getForfaitExpiration();
+        if (expirationDate != null && expirationDate.after(new Date())) {
+            return ResponseEntity.ok("Forfait actif jusqu'au " + expirationDate); // Forfait actif
         }
 
-        return ResponseEntity.ok(activeForfaits);
+        // Si aucune date d'expiration ou date expirée
+        return ResponseEntity.noContent().build(); // Aucun forfait actif
     }
 }
