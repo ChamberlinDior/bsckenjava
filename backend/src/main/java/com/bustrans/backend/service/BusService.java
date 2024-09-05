@@ -5,7 +5,6 @@ import com.bustrans.backend.repository.BusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,9 +31,12 @@ public class BusService {
             bus.setModele(busDetails.getModele());
             bus.setMatricule(busDetails.getMatricule());
             bus.setMarque(busDetails.getMarque());
+            bus.setMacAddress(busDetails.getMacAddress());
             bus.setChauffeurNom(busDetails.getChauffeurNom());
             bus.setChauffeurUniqueNumber(busDetails.getChauffeurUniqueNumber());
             bus.setLastDestination(busDetails.getLastDestination());
+            bus.setDebutTrajet(busDetails.getDebutTrajet());
+            bus.setFinTrajet(busDetails.getFinTrajet());
             return busRepository.save(bus);
         }
         return null;
@@ -44,25 +46,18 @@ public class BusService {
         busRepository.deleteById(id);
     }
 
-    public Bus startTrajet(Long id) {
-        Bus bus = getBusById(id);
+    public Bus getBusByMacAddress(String macAddress) {
+        return busRepository.findByMacAddress(macAddress);
+    }
+
+    // Méthode pour mettre à jour les informations du chauffeur via l'adresse MAC
+    public Bus updateChauffeurByMacAddress(String macAddress, String chauffeurNom, String chauffeurUniqueNumber) {
+        Bus bus = busRepository.findByMacAddress(macAddress);
         if (bus != null) {
-            bus.setDebutTrajet(new Date());
+            bus.setChauffeurNom(chauffeurNom);
+            bus.setChauffeurUniqueNumber(chauffeurUniqueNumber);
             return busRepository.save(bus);
         }
         return null;
-    }
-
-    public Bus endTrajet(Long id) {
-        Bus bus = getBusById(id);
-        if (bus != null) {
-            bus.setFinTrajet(new Date());
-            return busRepository.save(bus);
-        }
-        return null;
-    }
-
-    public Bus getBusByPlateNumber(String plateNumber) {
-        return busRepository.findByMatricule(plateNumber);
     }
 }

@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/buses")
@@ -45,65 +43,41 @@ public class BusController {
         busService.deleteBus(id);
     }
 
-    @GetMapping("/plates")
-    public ResponseEntity<List<String>> getAllBusPlates() {
-        List<String> plates = busService.getAllBuses().stream()
-                .map(Bus::getMatricule)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(plates);
-    }
-
-    @GetMapping("/matricule/{matricule}")
-    public ResponseEntity<Bus> getBusByMatricule(@PathVariable String matricule) {
-        Bus bus = busService.getBusByPlateNumber(matricule);
+    // Recherche par adresse MAC du TPE
+    @GetMapping("/mac/{macAddress}")
+    public ResponseEntity<Bus> getBusByMacAddress(@PathVariable String macAddress) {
+        Bus bus = busService.getBusByMacAddress(macAddress);
         if (bus != null) {
             return ResponseEntity.ok(bus);
         }
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/{id}/select-destination")
-    public ResponseEntity<Bus> selectDestination(@PathVariable Long id, @RequestParam String destination) {
-        Bus bus = busService.getBusById(id);
-        if (bus != null) {
-            bus.setLastDestination(destination);
-            busService.saveBus(bus);
-            return ResponseEntity.ok(bus);
+    // Mise à jour de la destination, début et fin de trajet via MAC du TPE
+    @PostMapping("/mac/{macAddress}/update-trajet")
+    public ResponseEntity<?> updateTrajetByMac(@PathVariable String macAddress, @RequestBody BusDTO busDTO) {
+        Bus bus = busService.getBusByMacAddress(macAddress);
+        if (bus == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        bus.setLastDestination(busDTO.getLastDestination());
+        bus.setDebutTrajet(busDTO.getDebutTrajet());
+        bus.setFinTrajet(busDTO.getFinTrajet());
+        busService.saveBus(bus);
+        return ResponseEntity.ok("Trajet mis à jour avec succès.");
     }
 
-    @PostMapping("/{id}/start")
-    public ResponseEntity<Bus> startTrajet(@PathVariable Long id) {
-        Bus bus = busService.startTrajet(id);
-        if (bus != null) {
-            return ResponseEntity.ok(bus);
+    // Mise à jour des informations du chauffeur via MAC du TPE
+    @PostMapping("/mac/{macAddress}/update-chauffeur")
+    public ResponseEntity<?> updateChauffeurByMac(@PathVariable String macAddress, @RequestBody BusDTO busDTO) {
+        Bus bus = busService.getBusByMacAddress(macAddress);
+        if (bus == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/{id}/end")
-    public ResponseEntity<Bus> endTrajet(@PathVariable Long id) {
-        Bus bus = busService.endTrajet(id);
-        if (bus != null) {
-            return ResponseEntity.ok(bus);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    // Mise à jour des informations du chauffeur via le numéro de plaque (matricule)
-    @PostMapping("/matricule/{matricule}/chauffeur")
-    public ResponseEntity<Bus> updateChauffeurInfoByMatricule(
-            @PathVariable String matricule,
-            @RequestBody Map<String, String> chauffeurInfo) {
-        Bus bus = busService.getBusByPlateNumber(matricule);
-        if (bus != null) {
-            bus.setChauffeurNom(chauffeurInfo.get("chauffeurName"));
-            bus.setChauffeurUniqueNumber(chauffeurInfo.get("chauffeurNumber"));
-            busService.saveBus(bus);
-            return ResponseEntity.ok(bus);
-        }
-        return ResponseEntity.notFound().build();
+        bus.setChauffeurNom(busDTO.getChauffeurNom());
+        bus.setChauffeurUniqueNumber(busDTO.getChauffeurUniqueNumber());
+        busService.saveBus(bus);
+        return ResponseEntity.ok("Chauffeur mis à jour avec succès.");
     }
 
     private Bus convertToEntity(BusDTO busDTO) {
@@ -112,11 +86,12 @@ public class BusController {
         bus.setModele(busDTO.getModele());
         bus.setMatricule(busDTO.getMatricule());
         bus.setMarque(busDTO.getMarque());
+        bus.setMacAddress(busDTO.getMacAddress());
         bus.setChauffeurNom(busDTO.getChauffeurNom());
         bus.setChauffeurUniqueNumber(busDTO.getChauffeurUniqueNumber());
+        bus.setLastDestination(busDTO.getLastDestination());
         bus.setDebutTrajet(busDTO.getDebutTrajet());
         bus.setFinTrajet(busDTO.getFinTrajet());
-        bus.setLastDestination(busDTO.getLastDestination());
         return bus;
     }
 }

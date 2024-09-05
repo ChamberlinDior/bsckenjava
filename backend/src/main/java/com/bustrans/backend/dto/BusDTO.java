@@ -3,12 +3,11 @@ package com.bustrans.backend.dto;
 import java.util.Date;
 
 public class BusDTO {
-
     private Long id;
     private String modele;
     private String matricule;
-    private String marque;
-    private String destination;
+    private String marque; // Champ pour la marque
+    private String macAddress;  // Adresse MAC du TPE
     private String chauffeurNom;
     private String chauffeurUniqueNumber;
     private Date debutTrajet;
@@ -48,12 +47,12 @@ public class BusDTO {
         this.marque = marque;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getMacAddress() {
+        return macAddress;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public String getChauffeurNom() {

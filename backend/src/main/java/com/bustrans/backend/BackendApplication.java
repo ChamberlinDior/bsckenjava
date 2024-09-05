@@ -15,7 +15,7 @@ public class BackendApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args) {
+	public void run(String... args) throws Exception {
 		System.out.println("Backend is running...");
 	}
 
@@ -25,10 +25,10 @@ public class BackendApplication implements CommandLineRunner {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/**")
-						.allowedOrigins("http://localhost:3000")
+						.allowedOriginPatterns("*")  // Use allowedOriginPatterns instead of allowedOrigins
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowedHeaders("*")
-						.allowCredentials(true);
+						.allowCredentials(true);  // Credentials allowed
 			}
 		};
 	}

@@ -17,10 +17,10 @@ public class Bus {
     private String matricule;
 
     @Column(nullable = false)
-    private String marque;
+    private String marque;  // Champ pour la marque
 
-    @Column
-    private String destination;
+    @Column(nullable = false, unique = true)
+    private String macAddress;  // Adresse MAC du TPE
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "debut_trajet")
@@ -72,12 +72,12 @@ public class Bus {
         this.marque = marque;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getMacAddress() {
+        return macAddress;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public Date getDebutTrajet() {
