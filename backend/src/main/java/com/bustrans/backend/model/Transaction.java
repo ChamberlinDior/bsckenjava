@@ -1,8 +1,6 @@
 package com.bustrans.backend.model;
 
 import jakarta.persistence.*;
-
-
 import java.util.Date;
 
 @Entity
@@ -12,49 +10,39 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    private String type;
+    private double montant;
+
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
-
-    @Column(nullable = false)
-    private Double montant;
-
-    @Column(nullable = false)
-    private String terminalId;
-
-    @Column(nullable = false)
-    private String lieu;
+    private Date dateTransaction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "carte_id")
-    private Carte carte;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
-    // Constructeurs, getters, setters
     public Transaction() {}
 
-    public Transaction(Date date, Double montant, String terminalId, String lieu, Carte carte) {
-        this.date = date;
+    public Transaction(String type, double montant, Date dateTransaction, Client client) {
+        this.type = type;
         this.montant = montant;
-        this.terminalId = terminalId;
-        this.lieu = lieu;
-        this.carte = carte;
+        this.dateTransaction = dateTransaction;
+        this.client = client;
     }
 
-    // Getters and Setters
+    // Getters et Setters
+
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Date getDate() { return date; }
-    public void setDate(Date date) { this.date = date; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-    public Double getMontant() { return montant; }
-    public void setMontant(Double montant) { this.montant = montant; }
+    public double getMontant() { return montant; }
+    public void setMontant(double montant) { this.montant = montant; }
 
-    public String getTerminalId() { return terminalId; }
-    public void setTerminalId(String terminalId) { this.terminalId = terminalId; }
+    public Date getDateTransaction() { return dateTransaction; }
+    public void setDateTransaction(Date dateTransaction) { this.dateTransaction = dateTransaction; }
 
-    public String getLieu() { return lieu; }
-    public void setLieu(String lieu) { this.lieu = lieu; }
-
-    public Carte getCarte() { return carte; }
-    public void setCarte(Carte carte) { this.carte = carte; }
+    public Client getClient() { return client; }
+    public void setClient(Client client) { this.client = client; }
 }

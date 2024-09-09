@@ -5,11 +5,9 @@ import com.bustrans.backend.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Service
 public class ClientService {
@@ -22,17 +20,20 @@ public class ClientService {
     }
 
     public Client saveClient(Client client) {
-        // Génération automatique du numéro de client s'il n'est pas fourni
+        // Génération automatique du numéro de client et de l'agent, ainsi que la date de création
         if (client.getNumClient() == null || client.getNumClient().isEmpty()) {
             client.setNumClient(generateClientNumber());
         }
 
-        // Génération automatique du nom de l'agent s'il n'est pas fourni
         if (client.getNomAgent() == null || client.getNomAgent().isEmpty()) {
             client.setNomAgent(generateAgentName());
         }
 
-        // Validation : les champs nom, prénom, quartier, ville ne doivent pas être vides
+        if (client.getDateCreation() == null) {
+            client.setDateCreation(new Date());
+        }
+
+        // Validation des champs obligatoires
         if (client.getNom() == null || client.getNom().isEmpty()) {
             throw new IllegalArgumentException("Le nom est obligatoire");
         }
@@ -65,9 +66,16 @@ public class ClientService {
             client.setQuartier(clientDetails.getQuartier());
             client.setVille(clientDetails.getVille());
             client.setNumClient(clientDetails.getNumClient());
-            if (client.getNomAgent() == null || client.getNomAgent().isEmpty()) {
-                client.setNomAgent(generateAgentName());
+
+            // Mise à jour du nom de l'agent et de la date de création si fournis
+            if (clientDetails.getNomAgent() != null && !clientDetails.getNomAgent().isEmpty()) {
+                client.setNomAgent(clientDetails.getNomAgent());
             }
+
+            if (clientDetails.getDateCreation() != null) {
+                client.setDateCreation(clientDetails.getDateCreation());
+            }
+
             return clientRepository.save(client);
         }
         return null;
@@ -94,4 +102,3 @@ public class ClientService {
         return "Agent-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
     }
 }
-

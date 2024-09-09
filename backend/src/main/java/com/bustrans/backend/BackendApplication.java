@@ -25,10 +25,10 @@ public class BackendApplication implements CommandLineRunner {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/**")
-						.allowedOriginPatterns("*")  // Use allowedOriginPatterns instead of allowedOrigins
+						.allowedOriginPatterns("*")  // Autoriser toutes les origines
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowedHeaders("*")
-						.allowCredentials(true);  // Credentials allowed
+						.allowCredentials(true); // Credentials allowed
 			}
 		};
 	}

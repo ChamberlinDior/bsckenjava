@@ -3,33 +3,78 @@ package com.bustrans.backend.dto;
 import java.util.Date;
 
 public class CarteDTO {
+
     private Long id;
-    private String numCarte;
-    private Date dateDelivrance;  // Utilisation du type Date
-    private Date dateFinValidite;  // Utilisation du type Date
-    private String nomAgentDelivrance;
-    private String statut;
     private Long clientId;
+    private String nom;
+    private String prenom;
+    private String nomAgent;
+    private String rfid;
+    private Date dateCreation;
+    private Date dateDelivrance;
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // Getters et setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getNumCarte() { return numCarte; }
-    public void setNumCarte(String numCarte) { this.numCarte = numCarte; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Date getDateDelivrance() { return dateDelivrance; }
-    public void setDateDelivrance(Date dateDelivrance) { this.dateDelivrance = dateDelivrance; }
+    public Long getClientId() {
+        return clientId;
+    }
 
-    public Date getDateFinValidite() { return dateFinValidite; }
-    public void setDateFinValidite(Date dateFinValidite) { this.dateFinValidite = dateFinValidite; }
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
 
-    public String getNomAgentDelivrance() { return nomAgentDelivrance; }
-    public void setNomAgentDelivrance(String nomAgentDelivrance) { this.nomAgentDelivrance = nomAgentDelivrance; }
+    public String getNom() {
+        return nom;
+    }
 
-    public String getStatut() { return statut; }
-    public void setStatut(String statut) { this.statut = statut; }
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-    public Long getClientId() { return clientId; }
-    public void setClientId(Long clientId) { this.clientId = clientId; }
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getNomAgent() {
+        return nomAgent;
+    }
+
+    public void setNomAgent(String nomAgent) {
+        this.nomAgent = nomAgent;
+    }
+
+    public String getRfid() {
+        return rfid;
+    }
+
+    public void setRfid(String rfid) {
+        this.rfid = rfid;
+    }
+
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public Date getDateDelivrance() {
+        return dateDelivrance;
+    }
+
+    public void setDateDelivrance(Date dateDelivrance) {
+        this.dateDelivrance = dateDelivrance;
+    }
 }

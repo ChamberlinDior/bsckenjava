@@ -34,18 +34,44 @@ public class Forfait {
         this.client = client;
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getTypeForfait() { return typeForfait; }
-    public void setTypeForfait(String typeForfait) { this.typeForfait = typeForfait; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Date getDateActivation() { return dateActivation; }
-    public void setDateActivation(Date dateActivation) { this.dateActivation = dateActivation; }
+    public String getTypeForfait() {
+        return typeForfait;
+    }
 
-    public Date getDateExpiration() { return dateExpiration; }
-    public void setDateExpiration(Date dateExpiration) { this.dateExpiration = dateExpiration; }
+    public void setTypeForfait(String typeForfait) {
+        this.typeForfait = typeForfait;
+    }
 
-    public Client getClient() { return client; }
-    public void setClient(Client client) { this.client = client; }
+    public Date getDateActivation() {
+        return dateActivation;
+    }
+
+    public void setDateActivation(Date dateActivation) {
+        this.dateActivation = dateActivation;
+    }
+
+    public Date getDateExpiration() {
+        return dateExpiration;
+    }
+
+    public void setDateExpiration(Date dateExpiration) {
+        this.dateExpiration = dateExpiration;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 }

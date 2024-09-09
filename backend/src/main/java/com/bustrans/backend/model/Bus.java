@@ -17,10 +17,13 @@ public class Bus {
     private String matricule;
 
     @Column(nullable = false)
-    private String marque;  // Champ pour la marque
+    private String marque;
 
-    @Column(nullable = false, unique = true)
-    private String macAddress;  // Adresse MAC du TPE
+    @Column(nullable = true, unique = true)
+    private String macAddress;  // Adresse MAC du TPE, peut être null
+
+    @Column(nullable = true, unique = true)
+    private String ipAddress;  // Adresse IP du TPE, peut être null
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "debut_trajet")
@@ -78,6 +81,14 @@ public class Bus {
 
     public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public Date getDebutTrajet() {

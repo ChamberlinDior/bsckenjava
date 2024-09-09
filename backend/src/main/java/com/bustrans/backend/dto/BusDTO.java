@@ -6,8 +6,9 @@ public class BusDTO {
     private Long id;
     private String modele;
     private String matricule;
-    private String marque; // Champ pour la marque
-    private String macAddress;  // Adresse MAC du TPE
+    private String marque;
+    private String macAddress;
+    private String ipAddress;
     private String chauffeurNom;
     private String chauffeurUniqueNumber;
     private Date debutTrajet;
@@ -53,6 +54,14 @@ public class BusDTO {
 
     public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public String getChauffeurNom() {

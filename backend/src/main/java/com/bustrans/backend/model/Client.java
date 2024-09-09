@@ -54,40 +54,100 @@ public class Client {
         this.dateCreation = new Date();
     }
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getNumClient() { return numClient; }
-    public void setNumClient(String numClient) { this.numClient = numClient; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
+    public String getNumClient() {
+        return numClient;
+    }
 
-    public String getPrenom() { return prenom; }
-    public void setPrenom(String prenom) { this.prenom = prenom; }
+    public void setNumClient(String numClient) {
+        this.numClient = numClient;
+    }
 
-    public String getQuartier() { return quartier; }
-    public void setQuartier(String quartier) { this.quartier = quartier; }
+    public String getNom() {
+        return nom;
+    }
 
-    public String getVille() { return ville; }
-    public void setVille(String ville) { this.ville = ville; }
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-    public String getNomAgent() { return nomAgent; }
-    public void setNomAgent(String nomAgent) { this.nomAgent = nomAgent; }
+    public String getPrenom() {
+        return prenom;
+    }
 
-    public String getRfid() { return rfid; }
-    public void setRfid(String rfid) { this.rfid = rfid; }
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
 
-    public Date getDateCreation() { return dateCreation; }
-    public void setDateCreation(Date dateCreation) { this.dateCreation = dateCreation; }
+    public String getQuartier() {
+        return quartier;
+    }
 
-    public int getBalance() { return balance; }
-    public void setBalance(int balance) { this.balance = balance; }
+    public void setQuartier(String quartier) {
+        this.quartier = quartier;
+    }
 
-    public Date getForfaitExpiration() { return forfaitExpiration; }
-    public void setForfaitExpiration(Date forfaitExpiration) { this.forfaitExpiration = forfaitExpiration; }
+    public String getVille() {
+        return ville;
+    }
 
-    public boolean isForfaitActif() { return forfaitActif; }
-    public void setForfaitActif(boolean forfaitActif) { this.forfaitActif = forfaitActif; }
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public String getNomAgent() {
+        return nomAgent;
+    }
+
+    public void setNomAgent(String nomAgent) {
+        this.nomAgent = nomAgent;
+    }
+
+    public String getRfid() {
+        return rfid;
+    }
+
+    public void setRfid(String rfid) {
+        this.rfid = rfid;
+    }
+
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public Date getForfaitExpiration() {
+        return forfaitExpiration;
+    }
+
+    public void setForfaitExpiration(Date forfaitExpiration) {
+        this.forfaitExpiration = forfaitExpiration;
+    }
+
+    public boolean isForfaitActif() {
+        return forfaitActif;
+    }
+
+    public void setForfaitActif(boolean forfaitActif) {
+        this.forfaitActif = forfaitActif;
+    }
 }
