@@ -19,11 +19,11 @@ public class Bus {
     @Column(nullable = false)
     private String marque;
 
-    @Column(nullable = true, unique = true)
-    private String macAddress;  // Adresse MAC du TPE, peut être null
+    @Column(nullable = false, unique = true)
+    private String macAddress;
 
     @Column(nullable = true, unique = true)
-    private String ipAddress;  // Adresse IP du TPE, peut être null
+    private String ipAddress;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "debut_trajet")
@@ -43,6 +43,7 @@ public class Bus {
     private String lastDestination;
 
     // Getters et Setters
+
     public Long getId() {
         return id;
     }

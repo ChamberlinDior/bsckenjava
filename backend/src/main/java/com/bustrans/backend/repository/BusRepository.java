@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BusRepository extends JpaRepository<Bus, Long> {
-    Bus findByMacAddress(String macAddress);  // Recherche d'un bus par l'adresse MAC
+    // Recherche d'un bus par l'adresse MAC
+    Bus findByMacAddress(String macAddress);
 }

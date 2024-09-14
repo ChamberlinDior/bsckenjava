@@ -9,4 +9,5 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     // Méthode pour récupérer les transactions par client
     List<Transaction> findByClient(Client client);
+    
 }

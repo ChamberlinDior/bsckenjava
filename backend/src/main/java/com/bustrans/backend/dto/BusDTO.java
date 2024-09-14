@@ -16,6 +16,7 @@ public class BusDTO {
     private String lastDestination;
 
     // Getters et Setters
+
     public Long getId() {
         return id;
     }

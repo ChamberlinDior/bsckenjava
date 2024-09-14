@@ -9,6 +9,7 @@ public class ClientDTO {
     private String ville;
     private String dateCreation;
     private String nomAgent;
+    private String rfid; // Nouveau champ ajouté
 
     // Getters and Setters
     public Long getId() {
@@ -73,5 +74,13 @@ public class ClientDTO {
 
     public void setNomAgent(String nomAgent) {
         this.nomAgent = nomAgent;
+    }
+
+    public String getRfid() {
+        return rfid;
+    }
+
+    public void setRfid(String rfid) {
+        this.rfid = rfid;
     }
 }

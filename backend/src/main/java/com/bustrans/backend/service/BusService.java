@@ -13,50 +13,73 @@ public class BusService {
     @Autowired
     private BusRepository busRepository;
 
+    // Récupérer tous les bus
     public List<Bus> getAllBuses() {
         return busRepository.findAll();
     }
 
+    // Enregistrer un bus
     public Bus saveBus(Bus bus) {
         return busRepository.save(bus);
     }
 
-    public Bus getBusById(Long id) {
-        return busRepository.findById(id).orElse(null);
+    // Récupérer un bus par son adresse MAC
+    public Bus getBusByMacAddress(String macAddress) {
+        return busRepository.findByMacAddress(macAddress);
     }
 
-    public Bus updateBus(Long id, Bus busDetails) {
-        Bus bus = getBusById(id);
+    // Mettre à jour le chauffeur et la destination
+    public Bus updateChauffeurAndDestinationByMacAddress(String macAddress, String lastDestination, String chauffeurNom, String chauffeurUniqueNumber) {
+        Bus bus = busRepository.findByMacAddress(macAddress);
         if (bus != null) {
-            bus.setModele(busDetails.getModele());
-            bus.setMatricule(busDetails.getMatricule());
-            bus.setMarque(busDetails.getMarque());
-            bus.setMacAddress(busDetails.getMacAddress());
-            bus.setChauffeurNom(busDetails.getChauffeurNom());
-            bus.setChauffeurUniqueNumber(busDetails.getChauffeurUniqueNumber());
-            bus.setLastDestination(busDetails.getLastDestination());
-            bus.setDebutTrajet(busDetails.getDebutTrajet());
-            bus.setFinTrajet(busDetails.getFinTrajet());
+            bus.setLastDestination(lastDestination);
+            bus.setChauffeurNom(chauffeurNom);  // Mise à jour du nom du chauffeur
+            bus.setChauffeurUniqueNumber(chauffeurUniqueNumber);  // Mise à jour du numéro unique du chauffeur
             return busRepository.save(bus);
         }
         return null;
     }
 
-    public void deleteBus(Long id) {
-        busRepository.deleteById(id);
-    }
-
-    public Bus getBusByMacAddress(String macAddress) {
-        return busRepository.findByMacAddress(macAddress);
-    }
-
-    // Méthode pour mettre à jour les informations du chauffeur via l'adresse MAC
-    public Bus updateChauffeurByMacAddress(String macAddress, String chauffeurNom, String chauffeurUniqueNumber) {
+    // Démarrer un trajet
+    public Bus startTrip(String macAddress, String lastDestination) {
         Bus bus = busRepository.findByMacAddress(macAddress);
         if (bus != null) {
-            bus.setChauffeurNom(chauffeurNom);
-            bus.setChauffeurUniqueNumber(chauffeurUniqueNumber);
+            bus.setDebutTrajet(new java.util.Date());
+            bus.setLastDestination(lastDestination);
             return busRepository.save(bus);
+        }
+        return null;
+    }
+
+    // Terminer un trajet
+    public Bus endTrip(String macAddress) {
+        Bus bus = busRepository.findByMacAddress(macAddress);
+        if (bus != null) {
+            bus.setFinTrajet(new java.util.Date());
+            return busRepository.save(bus);
+        }
+        return null;
+    }
+
+    // Mettre à jour uniquement la destination du bus
+    public Bus updateLastDestination(String macAddress, String lastDestination) {
+        Bus bus = busRepository.findByMacAddress(macAddress);
+        if (bus != null) {
+            bus.setLastDestination(lastDestination);
+            return busRepository.save(bus);
+        }
+        return null;
+    }
+
+    // Créer ou mettre à jour la destination
+    public Bus createOrUpdateLastDestination(String macAddress, String lastDestination) {
+        Bus bus = busRepository.findByMacAddress(macAddress);
+        if (bus != null) {
+            if (bus.getLastDestination() == null || !bus.getLastDestination().equals(lastDestination)) {
+                bus.setLastDestination(lastDestination);
+                return busRepository.save(bus);
+            }
+            return bus;
         }
         return null;
     }

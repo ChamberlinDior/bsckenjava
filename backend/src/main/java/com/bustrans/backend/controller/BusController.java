@@ -1,6 +1,5 @@
 package com.bustrans.backend.controller;
 
-import com.bustrans.backend.dto.BusDTO;
 import com.bustrans.backend.model.Bus;
 import com.bustrans.backend.service.BusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,34 +15,14 @@ public class BusController {
     @Autowired
     private BusService busService;
 
+    // Récupérer tous les bus
     @GetMapping
-    public List<Bus> getAllBuses() {
-        return busService.getAllBuses();
+    public ResponseEntity<List<Bus>> getAllBuses() {
+        List<Bus> buses = busService.getAllBuses();
+        return ResponseEntity.ok(buses);
     }
 
-    @PostMapping
-    public Bus createBus(@RequestBody BusDTO busDTO) {
-        Bus bus = convertToEntity(busDTO);
-        return busService.saveBus(bus);
-    }
-
-    @GetMapping("/{id}")
-    public Bus getBusById(@PathVariable Long id) {
-        return busService.getBusById(id);
-    }
-
-    @PutMapping("/{id}")
-    public Bus updateBus(@PathVariable Long id, @RequestBody BusDTO busDTO) {
-        Bus bus = convertToEntity(busDTO);
-        return busService.updateBus(id, bus);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteBus(@PathVariable Long id) {
-        busService.deleteBus(id);
-    }
-
-    // Recherche par adresse MAC du TPE
+    // Récupérer un bus par son adresse MAC
     @GetMapping("/mac/{macAddress}")
     public ResponseEntity<Bus> getBusByMacAddress(@PathVariable String macAddress) {
         Bus bus = busService.getBusByMacAddress(macAddress);
@@ -53,45 +32,73 @@ public class BusController {
         return ResponseEntity.notFound().build();
     }
 
-    // Mise à jour de la destination, début et fin de trajet via MAC du TPE
-    @PostMapping("/mac/{macAddress}/update-trajet")
-    public ResponseEntity<?> updateTrajetByMac(@PathVariable String macAddress, @RequestBody BusDTO busDTO) {
-        Bus bus = busService.getBusByMacAddress(macAddress);
-        if (bus == null) {
-            return ResponseEntity.notFound().build();
+    // Créer un nouveau bus
+    @PostMapping("/create")
+    public ResponseEntity<?> createBus(@RequestBody Bus bus) {
+        try {
+            Bus newBus = busService.saveBus(bus);
+            return ResponseEntity.ok(newBus);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la création du bus : " + e.getMessage());
         }
-        bus.setLastDestination(busDTO.getLastDestination());
-        bus.setDebutTrajet(busDTO.getDebutTrajet());
-        bus.setFinTrajet(busDTO.getFinTrajet());
-        busService.saveBus(bus);
-        return ResponseEntity.ok("Trajet mis à jour avec succès.");
     }
 
-    // Mise à jour des informations du chauffeur via MAC du TPE
-    @PostMapping("/mac/{macAddress}/update-chauffeur")
-    public ResponseEntity<?> updateChauffeurByMac(@PathVariable String macAddress, @RequestBody BusDTO busDTO) {
-        Bus bus = busService.getBusByMacAddress(macAddress);
-        if (bus == null) {
-            return ResponseEntity.notFound().build();
+    // Mettre à jour le chauffeur et la destination par adresse MAC
+    @PostMapping("/mac/{macAddress}/update-chauffeur-destination")
+    public ResponseEntity<?> updateChauffeurAndDestinationByMac(
+            @PathVariable String macAddress,
+            @RequestParam String lastDestination,
+            @RequestParam String chauffeurNom,
+            @RequestParam String chauffeurUniqueNumber) {  // Ajout de chauffeurNom et chauffeurUniqueNumber
+        Bus bus = busService.updateChauffeurAndDestinationByMacAddress(macAddress, lastDestination, chauffeurNom, chauffeurUniqueNumber);
+        if (bus != null) {
+            return ResponseEntity.ok("Chauffeur et destination mis à jour avec succès.");
         }
-        bus.setChauffeurNom(busDTO.getChauffeurNom());
-        bus.setChauffeurUniqueNumber(busDTO.getChauffeurUniqueNumber());
-        busService.saveBus(bus);
-        return ResponseEntity.ok("Chauffeur mis à jour avec succès.");
+        return ResponseEntity.notFound().build();
     }
 
-    private Bus convertToEntity(BusDTO busDTO) {
-        Bus bus = new Bus();
-        bus.setId(busDTO.getId());
-        bus.setModele(busDTO.getModele());
-        bus.setMatricule(busDTO.getMatricule());
-        bus.setMarque(busDTO.getMarque());
-        bus.setMacAddress(busDTO.getMacAddress());
-        bus.setChauffeurNom(busDTO.getChauffeurNom());
-        bus.setChauffeurUniqueNumber(busDTO.getChauffeurUniqueNumber());
-        bus.setLastDestination(busDTO.getLastDestination());
-        bus.setDebutTrajet(busDTO.getDebutTrajet());
-        bus.setFinTrajet(busDTO.getFinTrajet());
-        return bus;
+    // Démarrer un trajet par adresse MAC
+    @PostMapping("/mac/{macAddress}/start-trip")
+    public ResponseEntity<?> startTrip(@PathVariable String macAddress,
+                                       @RequestParam String lastDestination) {
+        Bus bus = busService.startTrip(macAddress, lastDestination);
+        if (bus != null) {
+            return ResponseEntity.ok("Trajet démarré avec succès.");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // Terminer un trajet par adresse MAC
+    @PostMapping("/mac/{macAddress}/end-trip")
+    public ResponseEntity<?> endTrip(@PathVariable String macAddress) {
+        Bus bus = busService.endTrip(macAddress);
+        if (bus != null) {
+            return ResponseEntity.ok("Trajet terminé avec succès.");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // Mettre à jour uniquement la destination d'un bus
+    @PutMapping("/mac/{macAddress}/update-destination")
+    public ResponseEntity<?> updateLastDestination(
+            @PathVariable String macAddress,
+            @RequestParam String lastDestination) {
+        Bus bus = busService.updateLastDestination(macAddress, lastDestination);
+        if (bus != null) {
+            return ResponseEntity.ok("Destination mise à jour avec succès.");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // Créer une nouvelle destination si elle n'existe pas
+    @PostMapping("/mac/{macAddress}/create-destination")
+    public ResponseEntity<?> createOrUpdateDestination(
+            @PathVariable String macAddress,
+            @RequestParam String lastDestination) {
+        Bus bus = busService.createOrUpdateLastDestination(macAddress, lastDestination);
+        if (bus != null) {
+            return ResponseEntity.ok("Destination créée ou mise à jour avec succès.");
+        }
+        return ResponseEntity.notFound().build();
     }
 }

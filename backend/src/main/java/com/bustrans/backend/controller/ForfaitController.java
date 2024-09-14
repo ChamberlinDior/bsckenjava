@@ -42,8 +42,11 @@ public class ForfaitController {
 
     // Récupérer le statut d'un forfait par RFID
     @GetMapping("/status/{rfid}")
-    public ResponseEntity<String> getForfaitStatusByRFID(@PathVariable String rfid) {
-        String status = forfaitService.getForfaitStatusByRFID(rfid);
-        return ResponseEntity.ok(status);
+    public ResponseEntity<ForfaitDTO> getForfaitStatusByRFID(@PathVariable String rfid) {
+        ForfaitDTO forfaitDTO = forfaitService.getForfaitStatusByRFID(rfid);
+        if (forfaitDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(forfaitDTO);
     }
 }
