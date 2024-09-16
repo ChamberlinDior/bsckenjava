@@ -5,22 +5,23 @@ import java.util.Date;
 public class TransactionDTO {
 
     private Long id;
-    private String type;
-    private double montant;
+    private String terminalId;
+    private String forfaitType;
+    private String clientRfid;
+    private String utilisateurId;
     private Date dateTransaction;
-    private Long clientId;
-    private String clientNom;
 
-    // Constructeurs
+    // Constructeur vide
     public TransactionDTO() {}
 
-    public TransactionDTO(Long id, String type, double montant, Date dateTransaction, Long clientId, String clientNom) {
+    // Constructeur avec tous les paramètres
+    public TransactionDTO(Long id, String terminalId, String forfaitType, String clientRfid, String utilisateurId, Date dateTransaction) {
         this.id = id;
-        this.type = type;
-        this.montant = montant;
+        this.terminalId = terminalId;
+        this.forfaitType = forfaitType;
+        this.clientRfid = clientRfid;
+        this.utilisateurId = utilisateurId;
         this.dateTransaction = dateTransaction;
-        this.clientId = clientId;
-        this.clientNom = clientNom;
     }
 
     // Getters et Setters
@@ -32,20 +33,36 @@ public class TransactionDTO {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getTerminalId() {
+        return terminalId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTerminalId(String terminalId) {
+        this.terminalId = terminalId;
     }
 
-    public double getMontant() {
-        return montant;
+    public String getForfaitType() {
+        return forfaitType;
     }
 
-    public void setMontant(double montant) {
-        this.montant = montant;
+    public void setForfaitType(String forfaitType) {
+        this.forfaitType = forfaitType;
+    }
+
+    public String getClientRfid() {
+        return clientRfid;
+    }
+
+    public void setClientRfid(String clientRfid) {
+        this.clientRfid = clientRfid;
+    }
+
+    public String getUtilisateurId() {
+        return utilisateurId;
+    }
+
+    public void setUtilisateurId(String utilisateurId) {
+        this.utilisateurId = utilisateurId;
     }
 
     public Date getDateTransaction() {
@@ -54,21 +71,5 @@ public class TransactionDTO {
 
     public void setDateTransaction(Date dateTransaction) {
         this.dateTransaction = dateTransaction;
-    }
-
-    public Long getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getClientNom() {
-        return clientNom;
-    }
-
-    public void setClientNom(String clientNom) {
-        this.clientNom = clientNom;
     }
 }

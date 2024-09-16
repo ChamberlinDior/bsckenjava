@@ -10,39 +10,72 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
-    private double montant;
+    @Column(nullable = false)
+    private String terminalId;
+
+    @Column(nullable = false)
+    private String forfaitType;
+
+    @Column(nullable = false)
+    private String clientRfid;
+
+    @Column(nullable = false)
+    private String utilisateurId;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     private Date dateTransaction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
-
-    public Transaction() {}
-
-    public Transaction(String type, double montant, Date dateTransaction, Client client) {
-        this.type = type;
-        this.montant = montant;
-        this.dateTransaction = dateTransaction;
-        this.client = client;
+    public Transaction() {
+        this.dateTransaction = new Date();
     }
 
     // Getters et Setters
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public String getTerminalId() {
+        return terminalId;
+    }
 
-    public double getMontant() { return montant; }
-    public void setMontant(double montant) { this.montant = montant; }
+    public void setTerminalId(String terminalId) {
+        this.terminalId = terminalId;
+    }
 
-    public Date getDateTransaction() { return dateTransaction; }
-    public void setDateTransaction(Date dateTransaction) { this.dateTransaction = dateTransaction; }
+    public String getForfaitType() {
+        return forfaitType;
+    }
 
-    public Client getClient() { return client; }
-    public void setClient(Client client) { this.client = client; }
+    public void setForfaitType(String forfaitType) {
+        this.forfaitType = forfaitType;
+    }
+
+    public String getClientRfid() {
+        return clientRfid;
+    }
+
+    public void setClientRfid(String clientRfid) {
+        this.clientRfid = clientRfid;
+    }
+
+    public String getUtilisateurId() {
+        return utilisateurId;
+    }
+
+    public void setUtilisateurId(String utilisateurId) {
+        this.utilisateurId = utilisateurId;
+    }
+
+    public Date getDateTransaction() {
+        return dateTransaction;
+    }
+
+    public void setDateTransaction(Date dateTransaction) {
+        this.dateTransaction = dateTransaction;
+    }
 }

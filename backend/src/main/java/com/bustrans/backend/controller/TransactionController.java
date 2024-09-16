@@ -1,9 +1,7 @@
 package com.bustrans.backend.controller;
 
 import com.bustrans.backend.dto.TransactionDTO;
-import com.bustrans.backend.model.Client;
 import com.bustrans.backend.model.Transaction;
-import com.bustrans.backend.service.ClientService;
 import com.bustrans.backend.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,53 +17,42 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @Autowired
-    private ClientService clientService;
+    // Récupérer toutes les transactions
+    @GetMapping
+    public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        List<TransactionDTO> transactionDTOs = transactions.stream().map(transaction -> new TransactionDTO(
+                transaction.getId(),
+                transaction.getTerminalId(),
+                transaction.getForfaitType(),
+                transaction.getClientRfid(),
+                transaction.getUtilisateurId(),
+                transaction.getDateTransaction()
+        )).collect(Collectors.toList());
 
-    // Méthode pour récupérer toutes les transactions d'un client spécifique
-    @GetMapping("/{clientId}")
-    public ResponseEntity<List<TransactionDTO>> getClientTransactions(@PathVariable Long clientId) {
-        // Récupération du client
-        Client client = clientService.getClientById(clientId);
-        if (client == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // Récupération des transactions associées au client
-        List<Transaction> transactions = transactionService.getTransactionsByClient(client);
-
-        // Transformation des transactions en DTO
-        List<TransactionDTO> transactionDTOs = transactions.stream()
-                .map(transaction -> new TransactionDTO(
-                        transaction.getId(),
-                        transaction.getType(),
-                        transaction.getMontant(),
-                        transaction.getDateTransaction(),
-                        transaction.getClient().getId(),
-                        transaction.getClient().getNom()
-                ))
-                .collect(Collectors.toList());
-
-        // Retourne la liste des transactions en DTO
         return ResponseEntity.ok(transactionDTOs);
     }
 
-    // Méthode pour récupérer toutes les transactions (pour un usage global si nécessaire)
-    @GetMapping("/all")
-    public List<TransactionDTO> getAllTransactions() {
-        // Récupération de toutes les transactions
-        List<Transaction> transactions = transactionService.getAllTransactions();
+    // Créer une nouvelle transaction
+    @PostMapping
+    public ResponseEntity<TransactionDTO> createTransaction(@RequestBody TransactionDTO transactionDTO) {
+        Transaction transaction = new Transaction();
+        transaction.setTerminalId(transactionDTO.getTerminalId());
+        transaction.setForfaitType(transactionDTO.getForfaitType());
+        transaction.setClientRfid(transactionDTO.getClientRfid());
+        transaction.setUtilisateurId(transactionDTO.getUtilisateurId());
+        transaction.setDateTransaction(transactionDTO.getDateTransaction());
 
-        // Transformation en DTO
-        return transactions.stream()
-                .map(transaction -> new TransactionDTO(
-                        transaction.getId(),
-                        transaction.getType(),
-                        transaction.getMontant(),
-                        transaction.getDateTransaction(),
-                        transaction.getClient().getId(),
-                        transaction.getClient().getNom()
-                ))
-                .collect(Collectors.toList());
+        Transaction newTransaction = transactionService.createTransaction(transaction);
+        TransactionDTO newTransactionDTO = new TransactionDTO(
+                newTransaction.getId(),
+                newTransaction.getTerminalId(),
+                newTransaction.getForfaitType(),
+                newTransaction.getClientRfid(),
+                newTransaction.getUtilisateurId(),
+                newTransaction.getDateTransaction()
+        );
+
+        return ResponseEntity.ok(newTransactionDTO);
     }
 }
